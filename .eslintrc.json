@@ -1,0 +1,15 @@
+{
+  "extends": ["next", "next/core-web-vitals"],
+  "globals": {
+    "React": "readonly"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "no-console": 2,
+    "no-unused-vars": [2, { "args": "after-used", "argsIgnorePattern": "^_" }]
+  }
+}
