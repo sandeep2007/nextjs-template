@@ -1,0 +1,35 @@
+services:
+  haproxy:
+    image: haproxy:latest
+    container_name: nextjs-template-haproxy
+    ports:
+      - '8080:80'
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - HUSKY=0
+    networks:
+      - app-network
+    deploy:
+      replicas: 3 # Set the number of app replicas
+      resources:
+        limits:
+          cpus: '0.5' # Limit each replica to 0.5 CPUs
+          memory: '512M' # Limit each replica to 512MB of memory
+      restart_policy:
+        condition: on-failure
+    ports:
+      - '3000' # Required for HAProxy to access each app instance on port 3000
+
+networks:
+  app-network:
+    driver: bridge
